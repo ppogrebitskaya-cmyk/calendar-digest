@@ -1,0 +1,83 @@
+import { useState, useCallback } from 'react'
+import { addDays } from 'date-fns'
+import type { CourseEvent, MarketingEvent } from '../../types'
+import type { DigestSection } from '../../utils/digestUtils'
+import {
+  getWeekBounds,
+  getDigestData,
+  buildPlaintext,
+  formatWeekLabel,
+} from '../../utils/digestUtils'
+import styles from './Digest.module.css'
+
+interface DigestProps {
+  courses: CourseEvent[]
+  marketing: MarketingEvent[]
+  weekAnchor: Date
+  onWeekChange: (date: Date) => void
+}
+
+export function Digest({ courses, marketing, weekAnchor, onWeekChange }: DigestProps) {
+  const [copied, setCopied] = useState(false)
+
+  const { start: weekStart, end: weekEnd } = getWeekBounds(weekAnchor)
+
+  const sections: DigestSection[] = getDigestData(courses, marketing, weekStart, weekEnd)
+
+  const handlePrev = () => onWeekChange(addDays(weekAnchor, -7))
+  const handleNext = () => onWeekChange(addDays(weekAnchor, 7))
+
+  const handleCopy = useCallback(async () => {
+    const text = buildPlaintext(sections, weekStart, weekEnd)
+    try {
+      await navigator.clipboard.writeText(text)
+      localStorage.setItem('mif_digest_text', text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // clipboard not available
+    }
+  }, [sections, weekStart, weekEnd])
+
+  const weekLabel = formatWeekLabel(weekStart, weekEnd)
+
+  return (
+    <div className={styles.digest}>
+      <h2 className={styles.title}>Дайджест</h2>
+
+      <div className={styles.weekNav}>
+        <button className={styles.navBtn} onClick={handlePrev} aria-label="Предыдущая неделя">
+          ‹
+        </button>
+        <span className={styles.weekLabel}>{weekLabel}</span>
+        <button className={styles.navBtn} onClick={handleNext} aria-label="Следующая неделя">
+          ›
+        </button>
+      </div>
+
+      <button
+        className={`${styles.copyBtn} ${copied ? styles.copyBtnCopied : ''}`}
+        onClick={handleCopy}
+      >
+        {copied ? 'Скопировано ✓' : 'Скопировать дайджест'}
+      </button>
+
+      <div className={styles.sections}>
+        {sections.length === 0 ? (
+          <p className={styles.empty}>На этой неделе событий нет</p>
+        ) : (
+          sections.map((section) => (
+            <div key={section.title} className={styles.section}>
+              <div className={styles.sectionTitle}>{section.title}</div>
+              {section.items.map((item, i) => (
+                <div key={i} className={styles.item}>
+                  • {item}
+                </div>
+              ))}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}

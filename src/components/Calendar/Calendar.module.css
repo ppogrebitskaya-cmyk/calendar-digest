@@ -1,0 +1,291 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.navBtn {
+  background: none;
+  border: 1px solid #dadce0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: #3c4043;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.navBtn:hover {
+  background: #f1f3f4;
+}
+
+.monthLabel {
+  font-size: 20px;
+  font-weight: 500;
+  color: #3c4043;
+  text-transform: capitalize;
+}
+
+.calendarBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.weekDayHeaders {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.weekDayHeader {
+  border-right: 1px solid #e0e0e0;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #70757a;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.weekRow {
+  border-bottom: 1px solid #e0e0e0;
+  flex: 1;
+  min-height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.weekRowSelected {
+  background: #f0f4ff;
+}
+
+.weekRowSelected .dayCell {
+  background: transparent;
+}
+
+.dayNumberRow {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  z-index: 0;
+}
+
+.dayCell {
+  border-right: 1px solid #e0e0e0;
+  padding: 4px 6px;
+  min-height: 28px;
+  cursor: default;
+}
+
+.dayCell:hover {
+  background: #f8f9fa;
+}
+
+.dayCellOtherMonth .dayNumber {
+  color: #ccc;
+}
+
+.dayNumber {
+  font-size: 12px;
+  font-weight: 500;
+  color: #3c4043;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.dayNumberToday {
+  background: #1a73e8;
+  color: #ffffff;
+}
+
+.pillsGrid {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 22px;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pill {
+  height: 20px;
+  padding: 0 6px;
+  color: #ffffff;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  margin: 1px 0;
+  pointer-events: auto;
+}
+
+.pillText {
+  font-size: 11px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.pillBadge {
+  flex-shrink: 0;
+  margin-left: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.legendWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f3f4;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  flex: 1;
+}
+
+.legendActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.legendBtn {
+  font-size: 11px;
+  color: #5f6368;
+  background: none;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.legendBtn:hover {
+  background: #f1f3f4;
+}
+
+.legendHint {
+  font-size: 11px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition: background 0.15s;
+}
+
+.legendItem:hover {
+  background: #f1f3f4;
+}
+
+.legendItemHidden .legendLabel {
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(60, 64, 67, 0.25);
+  padding: 10px 14px;
+  min-width: 180px;
+  max-width: 300px;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.tooltipItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 3px 0;
+}
+
+.tooltipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.tooltipText {
+  font-size: 12px;
+  color: #3c4043;
+  line-height: 1.4;
+}

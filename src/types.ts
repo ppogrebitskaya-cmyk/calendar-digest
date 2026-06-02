@@ -40,7 +40,7 @@ export type EventType =
   | 'other'
 
 export const EVENT_COLORS: Record<EventType, string> = {
-  promo: '#78909c',
+  promo: '#d8c4f0',
   startSale: '#1a73e8',
   startStudy: '#0f9d58',
   lastCall: '#a5d6a7',

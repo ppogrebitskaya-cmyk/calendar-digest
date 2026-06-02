@@ -134,6 +134,8 @@ export function Calendar({ courses, marketing, promos, selectedWeekAnchor }: Cal
 
 function SpanningPill({ pill }: { pill: CalendarPill }) {
   const showLabel = pill.isStart || pill.colStart === 0
+  const darkText = pill.type === 'promo' || pill.type === 'lastCall'
+  const textColor = darkText ? '#222' : '#fff'
 
   const borderRadius = pill.isStart && pill.isEnd
     ? '4px'
@@ -153,11 +155,18 @@ function SpanningPill({ pill }: { pill: CalendarPill }) {
         borderRadius,
         marginLeft: pill.isStart ? 2 : 0,
         marginRight: pill.isEnd ? 2 : 0,
+        color: textColor,
       }}
       title={pill.label}
     >
       {showLabel && <span className={styles.pillText}>{pill.label}</span>}
-      <span className={styles.pillBadge} title={EVENT_LABELS[pill.type]}>{EVENT_BADGES[pill.type]}</span>
+      <span
+        className={styles.pillBadge}
+        style={{ color: textColor, background: darkText ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.22)' }}
+        title={EVENT_LABELS[pill.type]}
+      >
+        {EVENT_BADGES[pill.type]}
+      </span>
     </div>
   )
 }

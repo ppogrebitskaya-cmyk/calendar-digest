@@ -43,15 +43,29 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
   const handleNext = () => onWeekChange(addDays(weekAnchor, 7))
 
   const handleCopy = useCallback(async () => {
+    const header = `Дайджест ${formatWeekLabel(weekStart, weekEnd)}\n`
+
+    const focusText = activeFocusItems.length > 0
+      ? '\nФокусы\n' + activeFocusItems.map(item => `• ${item}`).join('\n') + '\n'
+      : ''
+
+    const mainSectionsText = sections
+      .filter(s => s.title !== 'Другое')
+      .map(s => '\n' + s.title + '\n' + s.items.map(i => `• ${i}`).join('\n') + '\n')
+      .join('')
+
     const promoText = activePromos.length > 0
       ? '\nАкции\n' + activePromos.map(p =>
           `• ${p.name}: ${formatShortDate(p.dateFrom)} – ${formatShortDate(p.dateTo)}${p.bannersUrl ? ` (баннеры: ${p.bannersUrl})` : ''}`
         ).join('\n') + '\n'
       : ''
-    const focusText = activeFocusItems.length > 0
-      ? '\nФокусы\n' + activeFocusItems.map(item => `• ${item}`).join('\n') + '\n'
-      : ''
-    const text = promoText + focusText + buildPlaintext(sections, weekStart, weekEnd)
+
+    const otherText = sections
+      .filter(s => s.title === 'Другое')
+      .map(s => '\n' + s.title + '\n' + s.items.map(i => `• ${i}`).join('\n') + '\n')
+      .join('')
+
+    const text = header + focusText + mainSectionsText + promoText + otherText
     try {
       await navigator.clipboard.writeText(text)
       localStorage.setItem('mif_digest_text', text)
@@ -86,42 +100,51 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
       </button>
 
       <div className={styles.sections}>
-        {activePromos.length > 0 && (
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>Акции</div>
-            {activePromos.map((p, i) => (
-              <div key={i} className={styles.item}>
-                • {p.name}: {formatShortDate(p.dateFrom)} – {formatShortDate(p.dateTo)}
-                {p.bannersUrl && (
-                  <> (<a href={p.bannersUrl} target="_blank" rel="noopener noreferrer" className={styles.promoLink}>баннеры</a>)</>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeFocusItems.length > 0 && (
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>Фокусы</div>
-            {activeFocusItems.map((item, i) => (
-              <div key={i} className={styles.item}>• {item}</div>
-            ))}
-          </div>
-        )}
-
         {sections.length === 0 && activePromos.length === 0 && activeFocusItems.length === 0 ? (
           <p className={styles.empty}>На этой неделе событий нет</p>
         ) : (
-          sections.map((section) => (
-            <div key={section.title} className={styles.section}>
-              <div className={styles.sectionTitle}>{section.title}</div>
-              {section.items.map((item, i) => (
-                <div key={i} className={styles.item}>
-                  • {item}
-                </div>
-              ))}
-            </div>
-          ))
+          <>
+            {activeFocusItems.length > 0 && (
+              <div className={styles.section}>
+                <div className={styles.sectionTitle}>Фокусы</div>
+                {activeFocusItems.map((item, i) => (
+                  <div key={i} className={styles.item}>• {item}</div>
+                ))}
+              </div>
+            )}
+
+            {sections.filter(s => s.title !== 'Другое').map((section) => (
+              <div key={section.title} className={styles.section}>
+                <div className={styles.sectionTitle}>{section.title}</div>
+                {section.items.map((item, i) => (
+                  <div key={i} className={styles.item}>• {item}</div>
+                ))}
+              </div>
+            ))}
+
+            {activePromos.length > 0 && (
+              <div className={styles.section}>
+                <div className={styles.sectionTitle}>Акции</div>
+                {activePromos.map((p, i) => (
+                  <div key={i} className={styles.item}>
+                    • {p.name}: {formatShortDate(p.dateFrom)} – {formatShortDate(p.dateTo)}
+                    {p.bannersUrl && (
+                      <> (<a href={p.bannersUrl} target="_blank" rel="noopener noreferrer" className={styles.promoLink}>баннеры</a>)</>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {sections.filter(s => s.title === 'Другое').map((section) => (
+              <div key={section.title} className={styles.section}>
+                <div className={styles.sectionTitle}>{section.title}</div>
+                {section.items.map((item, i) => (
+                  <div key={i} className={styles.item}>• {item}</div>
+                ))}
+              </div>
+            ))}
+          </>
         )}
       </div>
     </div>

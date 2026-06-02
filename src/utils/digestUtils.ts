@@ -57,35 +57,6 @@ export function getDigestData(
 ): DigestSection[] {
   const sections: DigestSection[] = []
 
-  // Старт продаж
-  const startSaleItems: string[] = []
-  for (const c of courses) {
-    if (c.startSale && inWeek(c.startSale, weekStart, weekEnd)) {
-      startSaleItems.push(`${c.name} — ${formatShortDate(c.startSale)}`)
-    }
-  }
-  if (startSaleItems.length > 0) sections.push({ title: 'Старт продаж', items: startSaleItems })
-
-  // Старт обучения
-  const startStudyItems: string[] = []
-  for (const c of courses) {
-    if (c.startStudy && inWeek(c.startStudy, weekStart, weekEnd)) {
-      startStudyItems.push(`${c.name} — ${formatShortDate(c.startStudy)}`)
-    }
-  }
-  if (startStudyItems.length > 0) sections.push({ title: 'Старт обучения', items: startStudyItems })
-
-  // Ластколл
-  const lastCallItems: string[] = []
-  for (const c of courses) {
-    if (c.lastCall && c.lastCallEnd) {
-      if (rangeOverlapsWeek(c.lastCall, c.lastCallEnd, weekStart, weekEnd)) {
-        lastCallItems.push(`${c.name} — ${formatShortDate(c.lastCall)} – ${formatShortDate(c.lastCallEnd)}`)
-      }
-    }
-  }
-  if (lastCallItems.length > 0) sections.push({ title: 'Ластколл', items: lastCallItems })
-
   // Повышение цены 1
   const priceUp1Items: string[] = []
   for (const c of courses) {
@@ -112,6 +83,35 @@ export function getDigestData(
     }
   }
   if (priceUp3Items.length > 0) sections.push({ title: 'Повышение цены 3', items: priceUp3Items })
+
+  // Старт продаж
+  const startSaleItems: string[] = []
+  for (const c of courses) {
+    if (c.startSale && inWeek(c.startSale, weekStart, weekEnd)) {
+      startSaleItems.push(`${c.name} — ${formatShortDate(c.startSale)}`)
+    }
+  }
+  if (startSaleItems.length > 0) sections.push({ title: 'Старт продаж', items: startSaleItems })
+
+  // Ластколл
+  const lastCallItems: string[] = []
+  for (const c of courses) {
+    if (c.lastCall && c.lastCallEnd) {
+      if (rangeOverlapsWeek(c.lastCall, c.lastCallEnd, weekStart, weekEnd)) {
+        lastCallItems.push(`${c.name} — ${formatShortDate(c.lastCall)} – ${formatShortDate(c.lastCallEnd)}`)
+      }
+    }
+  }
+  if (lastCallItems.length > 0) sections.push({ title: 'Ластколл', items: lastCallItems })
+
+  // Старт обучения
+  const startStudyItems: string[] = []
+  for (const c of courses) {
+    if (c.startStudy && inWeek(c.startStudy, weekStart, weekEnd)) {
+      startStudyItems.push(`${c.name} — ${formatShortDate(c.startStudy)}`)
+    }
+  }
+  if (startStudyItems.length > 0) sections.push({ title: 'Старт обучения', items: startStudyItems })
 
   // Другое: course other events + marketing events mixed
   const otherItems: DigestOtherItem[] = []

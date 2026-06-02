@@ -11,7 +11,7 @@ import {
   format,
 } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import type { CourseEvent, MarketingEvent, EventType } from '../types'
+import type { CourseEvent, MarketingEvent, PromoEvent, EventType } from '../types'
 import { EVENT_COLORS } from '../types'
 
 export interface CalendarPill {
@@ -65,7 +65,8 @@ export function buildCalendarGrid(
   year: number,
   month: number,
   courses: CourseEvent[],
-  marketing: MarketingEvent[]
+  marketing: MarketingEvent[],
+  promos: PromoEvent[] = []
 ): CalendarWeek[] {
   const monthStart = startOfMonth(new Date(year, month, 1))
   const monthEnd = endOfMonth(monthStart)
@@ -74,6 +75,18 @@ export function buildCalendarGrid(
 
   // Collect all events as raw events with date ranges
   const rawEvents: RawEvent[] = []
+
+  // Pass 0: promo events — highest priority, always top row
+  for (const promo of promos) {
+    rawEvents.push({
+      id: pillKey('promo', promo.name, promo.dateFrom),
+      type: 'promo',
+      color: EVENT_COLORS.promo,
+      label: promo.name,
+      dateFrom: promo.dateFrom,
+      dateTo: promo.dateTo,
+    })
+  }
 
   // Pass 1: lastCall events first so they always occupy the top row
   for (const course of courses) {

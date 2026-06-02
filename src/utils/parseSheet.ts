@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 import { parse, isValid } from 'date-fns'
-import type { CourseEvent, CourseOtherEvent } from '../types'
+import type { CourseEvent, CourseOtherEvent, PromoEvent } from '../types'
 
 function parseDate(value: string): Date | undefined {
   if (!value || !value.trim()) return undefined
@@ -75,4 +75,31 @@ export async function fetchAndParseSheet(url: string): Promise<{
   }
 
   return { courses }
+}
+
+export async function fetchAndParsePromos(url: string): Promise<PromoEvent[]> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const text = await response.text()
+
+  const result = Papa.parse<string[]>(text, { skipEmptyLines: false })
+  const rows = result.data
+  const promos: PromoEvent[] = []
+
+  // Row 0 is header, data from row 1
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i]
+    if (!row || row.length === 0) continue
+    const col = (idx: number) => (row[idx] ?? '').trim()
+
+    const dateFrom = parseDate(col(0))
+    const dateTo = parseDate(col(1))
+    const name = col(2)
+    if (!dateFrom || !dateTo || !name) continue
+
+    const bannersUrl = col(3) || undefined
+    promos.push({ name, dateFrom, dateTo, bannersUrl })
+  }
+
+  return promos
 }

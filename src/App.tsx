@@ -33,6 +33,7 @@ export default function App() {
         <Digest
           courses={data.courses}
           marketing={[]}
+          promos={data.promos}
           weekAnchor={weekAnchor}
           onWeekChange={setWeekAnchor}
         />
@@ -42,6 +43,7 @@ export default function App() {
         <Calendar
           courses={data.courses}
           marketing={[]}
+          promos={data.promos}
           selectedWeekAnchor={weekAnchor}
         />
       </div>

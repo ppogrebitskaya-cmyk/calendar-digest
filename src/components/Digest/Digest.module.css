@@ -127,3 +127,12 @@
   line-height: 1.5;
   padding: 1px 0;
 }
+
+.promoLink {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+.promoLink:hover {
+  color: #1557b0;
+}

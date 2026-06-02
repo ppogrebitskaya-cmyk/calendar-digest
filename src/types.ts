@@ -22,7 +22,15 @@ export interface CourseEvent {
   other: CourseOtherEvent[]
 }
 
+export interface PromoEvent {
+  name: string
+  dateFrom: Date
+  dateTo: Date
+  bannersUrl?: string
+}
+
 export type EventType =
+  | 'promo'
   | 'startSale'
   | 'startStudy'
   | 'lastCall'
@@ -32,6 +40,7 @@ export type EventType =
   | 'other'
 
 export const EVENT_COLORS: Record<EventType, string> = {
+  promo: '#78909c',
   startSale: '#1a73e8',
   startStudy: '#0f9d58',
   lastCall: '#a5d6a7',
@@ -42,6 +51,7 @@ export const EVENT_COLORS: Record<EventType, string> = {
 }
 
 export const EVENT_LABELS: Record<EventType, string> = {
+  promo: 'Акция',
   startSale: 'Старт продаж',
   startStudy: 'Старт обучения',
   lastCall: 'Ластколл',
@@ -52,6 +62,7 @@ export const EVENT_LABELS: Record<EventType, string> = {
 }
 
 export const EVENT_BADGES: Record<EventType, string> = {
+  promo: 'АК',
   startSale: 'СП',
   startStudy: 'СО',
   lastCall: 'ЛК',

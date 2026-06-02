@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
-import type { CourseEvent } from '../types'
-import { fetchAndParseSheet } from '../utils/parseSheet'
+import type { CourseEvent, PromoEvent } from '../types'
+import { fetchAndParseSheet, fetchAndParsePromos } from '../utils/parseSheet'
 
 const SHEET_ID = '13fUWpXYJEr0vcMbZA1_rKrJGPyFg6_5FKunBygD-W0k'
-const GID = 88066687
-const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`
+const ITOG_GID = 88066687
+const PROMO_GID = 922625512
+
+const COURSES_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${ITOG_GID}`
+const PROMOS_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${PROMO_GID}`
 
 interface SheetData {
   courses: CourseEvent[]
+  promos: PromoEvent[]
 }
 
 interface UseSheetDataResult {
@@ -28,9 +32,12 @@ export function useSheetData(): UseSheetDataResult {
       setLoading(true)
       setError(null)
       try {
-        const result = await fetchAndParseSheet(CSV_URL)
+        const [{ courses }, promos] = await Promise.all([
+          fetchAndParseSheet(COURSES_URL),
+          fetchAndParsePromos(PROMOS_URL),
+        ])
         if (!cancelled) {
-          setData(result)
+          setData({ courses, promos })
         }
       } catch (err) {
         if (!cancelled) {

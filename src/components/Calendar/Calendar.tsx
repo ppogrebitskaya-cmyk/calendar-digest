@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import type { CourseEvent, MarketingEvent, EventType } from '../../types'
+import type { CourseEvent, MarketingEvent, PromoEvent, EventType } from '../../types'
 import { EVENT_LABELS, EVENT_COLORS, EVENT_BADGES } from '../../types'
 import type { CalendarPill, CalendarDay } from '../../utils/calendarUtils'
 import { buildCalendarGrid, getMonthLabel, isSameDay, assignRows } from '../../utils/calendarUtils'
@@ -11,6 +11,7 @@ const WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 interface CalendarProps {
   courses: CourseEvent[]
   marketing: MarketingEvent[]
+  promos: PromoEvent[]
   selectedWeekAnchor: Date
 }
 
@@ -20,7 +21,7 @@ interface TooltipState {
   y: number
 }
 
-export function Calendar({ courses, marketing, selectedWeekAnchor }: CalendarProps) {
+export function Calendar({ courses, marketing, promos, selectedWeekAnchor }: CalendarProps) {
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
@@ -28,7 +29,7 @@ export function Calendar({ courses, marketing, selectedWeekAnchor }: CalendarPro
   const [hiddenTypes, setHiddenTypes] = useState<Set<EventType>>(new Set())
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const weeks = buildCalendarGrid(year, month, courses, marketing)
+  const weeks = buildCalendarGrid(year, month, courses, marketing, promos)
   const monthLabel = getMonthLabel(year, month)
   const selectedWeekStart = startOfWeek(selectedWeekAnchor, { weekStartsOn: 1 }).getTime()
 

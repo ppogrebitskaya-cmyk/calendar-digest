@@ -10,6 +10,18 @@ import {
 } from '../../utils/digestUtils'
 import styles from './Digest.module.css'
 
+const SECTION_COLORS: Record<string, string> = {
+  'Фокусы':           '#7c4dff',
+  'Повышение цены 1': '#d50000',
+  'Повышение цены 2': '#c2185b',
+  'Повышение цены 3': '#880e4f',
+  'Старт продаж':     '#1a73e8',
+  'Ластколл':         '#2e7d32',
+  'Старт обучения':   '#0f9d58',
+  'Акции':            '#7b1fa2',
+  'Другое':           '#616161',
+}
+
 interface DigestProps {
   courses: CourseEvent[]
   marketing: MarketingEvent[]
@@ -105,7 +117,7 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
           <>
             {activeFocusItems.length > 0 && (
               <div className={styles.section}>
-                <div className={styles.sectionTitle}>Фокусы</div>
+                <div className={styles.sectionTitle} style={{ color: SECTION_COLORS['Фокусы'] }}>Фокусы</div>
                 {activeFocusItems.map((item, i) => (
                   <div key={i} className={styles.item}>• {item}</div>
                 ))}
@@ -114,7 +126,7 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
 
             {sections.filter(s => s.title !== 'Другое').map((section) => (
               <div key={section.title} className={styles.section}>
-                <div className={styles.sectionTitle}>{section.title}</div>
+                <div className={styles.sectionTitle} style={{ color: SECTION_COLORS[section.title] ?? '#70757a' }}>{section.title}</div>
                 {section.items.map((item, i) => (
                   <div key={i} className={styles.item}>• {item}</div>
                 ))}
@@ -123,7 +135,7 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
 
             {activePromos.length > 0 && (
               <div className={styles.section}>
-                <div className={styles.sectionTitle}>Акции</div>
+                <div className={styles.sectionTitle} style={{ color: SECTION_COLORS['Акции'] }}>Акции</div>
                 {activePromos.map((p, i) => (
                   <div key={i} className={styles.item}>
                     • {p.name}: {formatShortDate(p.dateFrom)} – {formatShortDate(p.dateTo)}
@@ -137,7 +149,7 @@ export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeek
 
             {sections.filter(s => s.title === 'Другое').map((section) => (
               <div key={section.title} className={styles.section}>
-                <div className={styles.sectionTitle}>{section.title}</div>
+                <div className={styles.sectionTitle} style={{ color: SECTION_COLORS['Другое'] }}>{section.title}</div>
                 {section.items.map((item, i) => (
                   <div key={i} className={styles.item}>• {item}</div>
                 ))}

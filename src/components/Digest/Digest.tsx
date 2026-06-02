@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { addDays, isWithinInterval, areIntervalsOverlapping } from 'date-fns'
+import { addDays, areIntervalsOverlapping } from 'date-fns'
 import type { CourseEvent, MarketingEvent, PromoEvent } from '../../types'
 import type { DigestSection } from '../../utils/digestUtils'
 import {

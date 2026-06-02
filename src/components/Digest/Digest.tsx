@@ -5,7 +5,6 @@ import type { DigestSection } from '../../utils/digestUtils'
 import {
   getWeekBounds,
   getDigestData,
-  buildPlaintext,
   formatWeekLabel,
   formatShortDate,
 } from '../../utils/digestUtils'

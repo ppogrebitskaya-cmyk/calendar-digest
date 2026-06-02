@@ -34,6 +34,7 @@ export default function App() {
           courses={data.courses}
           marketing={[]}
           promos={data.promos}
+          focuses={data.focuses}
           weekAnchor={weekAnchor}
           onWeekChange={setWeekAnchor}
         />

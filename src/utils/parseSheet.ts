@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 import { parse, isValid } from 'date-fns'
-import type { CourseEvent, CourseOtherEvent, PromoEvent } from '../types'
+import type { CourseEvent, CourseOtherEvent, PromoEvent, FocusWeek } from '../types'
 
 function parseDate(value: string): Date | undefined {
   if (!value || !value.trim()) return undefined
@@ -102,4 +102,36 @@ export async function fetchAndParsePromos(url: string): Promise<PromoEvent[]> {
   }
 
   return promos
+}
+
+export async function fetchAndParseFocuses(url: string): Promise<FocusWeek[]> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const text = await response.text()
+
+  const result = Papa.parse<string[]>(text, { skipEmptyLines: false })
+  const rows = result.data
+  const focuses: FocusWeek[] = []
+
+  // Row 0 is header, data from row 1
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i]
+    if (!row || row.length === 0) continue
+    const col = (idx: number) => (row[idx] ?? '').trim()
+
+    const weekDate = parseDate(col(1)) // B: week date
+    if (!weekDate) continue
+
+    const items: string[] = []
+    for (let c = 2; c < row.length; c++) {
+      const val = col(c)
+      if (val) items.push(val)
+    }
+
+    if (items.length > 0) {
+      focuses.push({ weekDate, items })
+    }
+  }
+
+  return focuses
 }

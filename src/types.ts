@@ -29,6 +29,11 @@ export interface PromoEvent {
   bannersUrl?: string
 }
 
+export interface FocusWeek {
+  weekDate: Date
+  items: string[]
+}
+
 export type EventType =
   | 'promo'
   | 'startSale'

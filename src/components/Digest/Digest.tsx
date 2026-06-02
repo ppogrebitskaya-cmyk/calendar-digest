@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { addDays, areIntervalsOverlapping } from 'date-fns'
-import type { CourseEvent, MarketingEvent, PromoEvent } from '../../types'
+import { addDays, isWithinInterval, areIntervalsOverlapping } from 'date-fns'
+import type { CourseEvent, MarketingEvent, PromoEvent, FocusWeek } from '../../types'
 import type { DigestSection } from '../../utils/digestUtils'
 import {
   getWeekBounds,
@@ -15,11 +15,12 @@ interface DigestProps {
   courses: CourseEvent[]
   marketing: MarketingEvent[]
   promos: PromoEvent[]
+  focuses: FocusWeek[]
   weekAnchor: Date
   onWeekChange: (date: Date) => void
 }
 
-export function Digest({ courses, marketing, promos, weekAnchor, onWeekChange }: DigestProps) {
+export function Digest({ courses, marketing, promos, focuses, weekAnchor, onWeekChange }: DigestProps) {
   const [copied, setCopied] = useState(false)
 
   const { start: weekStart, end: weekEnd } = getWeekBounds(weekAnchor)
@@ -34,6 +35,10 @@ export function Digest({ courses, marketing, promos, weekAnchor, onWeekChange }:
     )
   )
 
+  const activeFocusItems = focuses
+    .filter(f => isWithinInterval(f.weekDate, { start: weekStart, end: weekEnd }))
+    .flatMap(f => f.items)
+
   const handlePrev = () => onWeekChange(addDays(weekAnchor, -7))
   const handleNext = () => onWeekChange(addDays(weekAnchor, 7))
 
@@ -43,7 +48,10 @@ export function Digest({ courses, marketing, promos, weekAnchor, onWeekChange }:
           `• ${p.name}: ${formatShortDate(p.dateFrom)} – ${formatShortDate(p.dateTo)}${p.bannersUrl ? ` (баннеры: ${p.bannersUrl})` : ''}`
         ).join('\n') + '\n'
       : ''
-    const text = promoText + buildPlaintext(sections, weekStart, weekEnd)
+    const focusText = activeFocusItems.length > 0
+      ? '\nФокусы\n' + activeFocusItems.map(item => `• ${item}`).join('\n') + '\n'
+      : ''
+    const text = promoText + focusText + buildPlaintext(sections, weekStart, weekEnd)
     try {
       await navigator.clipboard.writeText(text)
       localStorage.setItem('mif_digest_text', text)
@@ -52,7 +60,7 @@ export function Digest({ courses, marketing, promos, weekAnchor, onWeekChange }:
     } catch {
       // clipboard not available
     }
-  }, [sections, activePromos, weekStart, weekEnd])
+  }, [sections, activePromos, activeFocusItems, weekStart, weekEnd])
 
   const weekLabel = formatWeekLabel(weekStart, weekEnd)
 
@@ -92,7 +100,16 @@ export function Digest({ courses, marketing, promos, weekAnchor, onWeekChange }:
           </div>
         )}
 
-        {sections.length === 0 && activePromos.length === 0 ? (
+        {activeFocusItems.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>Фокусы</div>
+            {activeFocusItems.map((item, i) => (
+              <div key={i} className={styles.item}>• {item}</div>
+            ))}
+          </div>
+        )}
+
+        {sections.length === 0 && activePromos.length === 0 && activeFocusItems.length === 0 ? (
           <p className={styles.empty}>На этой неделе событий нет</p>
         ) : (
           sections.map((section) => (

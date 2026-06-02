@@ -104,6 +104,18 @@ export async function fetchAndParsePromos(url: string): Promise<PromoEvent[]> {
   return promos
 }
 
+// Parses "DD.MM-DD.MM" range format (e.g. "01.06-07.06"), returns the start date using current year
+function parseFocusWeekDate(value: string): Date | undefined {
+  if (!value || !value.trim()) return undefined
+  const match = value.trim().match(/^(\d{1,2})\.(\d{1,2})/)
+  if (!match) return undefined
+  const day = parseInt(match[1], 10)
+  const month = parseInt(match[2], 10) - 1
+  const year = new Date().getFullYear()
+  const d = new Date(year, month, day)
+  return isNaN(d.getTime()) ? undefined : d
+}
+
 export async function fetchAndParseFocuses(url: string): Promise<FocusWeek[]> {
   const response = await fetch(url)
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -119,7 +131,7 @@ export async function fetchAndParseFocuses(url: string): Promise<FocusWeek[]> {
     if (!row || row.length === 0) continue
     const col = (idx: number) => (row[idx] ?? '').trim()
 
-    const weekDate = parseDate(col(1)) // B: week date
+    const weekDate = parseFocusWeekDate(col(1)) // B: "DD.MM-DD.MM" range
     if (!weekDate) continue
 
     const items: string[] = []

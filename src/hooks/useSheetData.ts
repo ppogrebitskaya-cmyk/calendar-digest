@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import type { CourseEvent, PromoEvent, FocusWeek } from '../types'
 import { fetchAndParseSheet, fetchAndParsePromos, fetchAndParseFocuses } from '../utils/parseSheet'
 
-const SHEET_ID = '13fUWpXYJEr0vcMbZA1_rKrJGPyFg6_5FKunBygD-W0k'
+const SHEET_ID = '18fY-_KNxK0wNpUVno184-62ahsVbYXIt25MldoLmI5U'
 const ITOG_GID = 88066687
 const PROMO_GID = 922625512
 const FOCUS_GID = 1134202112

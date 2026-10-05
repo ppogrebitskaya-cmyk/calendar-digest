@@ -62,16 +62,14 @@ export async function fetchAndParseSheet(url: string): Promise<{
     const startStudy = parseDate(col(3)) // D
     const lastCall   = parseDate(col(4)) // E: Ластколл: старт
     const lastCallEnd = parseDate(col(5)) // F: Ластколл: завершение
-    const priceUp1   = parseDate(col(6)) // G
-    const priceUp2   = parseDate(col(7)) // H
-    const priceUp3   = parseDate(col(8)) // I
+    // G–I: повышения цены — не используются
     const other      = parseOtherEvents(row, 9, 20) // J+
 
-    if (!startSale && !startStudy && !lastCall && !priceUp1 && !priceUp2 && !priceUp3 && other.length === 0) {
+    if (!startSale && !startStudy && !lastCall && other.length === 0) {
       continue
     }
 
-    courses.push({ name: courseName, startSale, startStudy, lastCall, lastCallEnd, priceUp1, priceUp2, priceUp3, other })
+    courses.push({ name: courseName, startSale, startStudy, lastCall, lastCallEnd, other })
   }
 
   return { courses }

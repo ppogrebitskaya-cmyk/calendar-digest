@@ -57,33 +57,6 @@ export function getDigestData(
 ): DigestSection[] {
   const sections: DigestSection[] = []
 
-  // Повышение цены 1
-  const priceUp1Items: string[] = []
-  for (const c of courses) {
-    if (c.priceUp1 && inWeek(c.priceUp1, weekStart, weekEnd)) {
-      priceUp1Items.push(`${c.name} — ${formatShortDate(c.priceUp1)}`)
-    }
-  }
-  if (priceUp1Items.length > 0) sections.push({ title: 'Повышение цены 1', items: priceUp1Items })
-
-  // Повышение цены 2
-  const priceUp2Items: string[] = []
-  for (const c of courses) {
-    if (c.priceUp2 && inWeek(c.priceUp2, weekStart, weekEnd)) {
-      priceUp2Items.push(`${c.name} — ${formatShortDate(c.priceUp2)}`)
-    }
-  }
-  if (priceUp2Items.length > 0) sections.push({ title: 'Повышение цены 2', items: priceUp2Items })
-
-  // Повышение цены 3
-  const priceUp3Items: string[] = []
-  for (const c of courses) {
-    if (c.priceUp3 && inWeek(c.priceUp3, weekStart, weekEnd)) {
-      priceUp3Items.push(`${c.name} — ${formatShortDate(c.priceUp3)}`)
-    }
-  }
-  if (priceUp3Items.length > 0) sections.push({ title: 'Повышение цены 3', items: priceUp3Items })
-
   // Старт продаж
   const startSaleItems: string[] = []
   for (const c of courses) {

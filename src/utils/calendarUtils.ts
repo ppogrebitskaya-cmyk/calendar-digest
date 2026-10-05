@@ -124,36 +124,6 @@ export function buildCalendarGrid(
         dateTo: course.startStudy,
       })
     }
-    if (course.priceUp1) {
-      rawEvents.push({
-        id: pillKey('priceUp1', course.name, course.priceUp1),
-        type: 'priceUp1',
-        color: EVENT_COLORS.priceUp1,
-        label: course.name,
-        dateFrom: course.priceUp1,
-        dateTo: course.priceUp1,
-      })
-    }
-    if (course.priceUp2) {
-      rawEvents.push({
-        id: pillKey('priceUp2', course.name, course.priceUp2),
-        type: 'priceUp2',
-        color: EVENT_COLORS.priceUp2,
-        label: course.name,
-        dateFrom: course.priceUp2,
-        dateTo: course.priceUp2,
-      })
-    }
-    if (course.priceUp3) {
-      rawEvents.push({
-        id: pillKey('priceUp3', course.name, course.priceUp3),
-        type: 'priceUp3',
-        color: EVENT_COLORS.priceUp3,
-        label: course.name,
-        dateFrom: course.priceUp3,
-        dateTo: course.priceUp3,
-      })
-    }
     for (const ev of course.other) {
       rawEvents.push({
         id: pillKey('other', `${course.name}-${ev.label}`, ev.dateFrom),

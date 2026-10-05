@@ -12,9 +12,6 @@ import styles from './Digest.module.css'
 
 const SECTION_COLORS: Record<string, string> = {
   'Фокусы':           '#7c4dff',
-  'Повышение цены 1': '#d50000',
-  'Повышение цены 2': '#c2185b',
-  'Повышение цены 3': '#880e4f',
   'Старт продаж':     '#1a73e8',
   'Ластколл':         '#2e7d32',
   'Старт обучения':   '#0f9d58',
